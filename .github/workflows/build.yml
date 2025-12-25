@@ -1,0 +1,43 @@
+name: Build NetBird LuCI App
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: package/luci-app-netbird
+
+      - name: Build with OpenWrt SDK
+        uses: openwrt/gh-action-sdk@v7
+        env:
+          ARCH: x86_64
+          KEY_BUILD: testing
+        with:
+          args: |
+            # Update feeds
+            ./scripts/feeds update -a
+            ./scripts/feeds install -a
+            
+            # Select our package
+            echo "CONFIG_PACKAGE_luci-app-netbird=y" >> .config
+            make defconfig
+            
+            # Build
+            make package/luci-app-netbird/compile V=s
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-app-netbird-ipk
+          path: bin/packages/**/*.ipk

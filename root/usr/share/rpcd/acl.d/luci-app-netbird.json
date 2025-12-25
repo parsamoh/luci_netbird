@@ -1,0 +1,21 @@
+{
+	"luci-app-netbird": {
+		"description": "Grant access to NetBird status and control",
+		"read": {
+			"file": {
+				"/usr/bin/netbird": [ "exec" ]
+			},
+			"ubus": {
+				"service": [ "list" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/usr/bin/netbird": [ "exec" ]
+			},
+			"ubus": {
+				"service": [ "list", "start", "stop", "reload" ]
+			}
+		}
+	}
+}

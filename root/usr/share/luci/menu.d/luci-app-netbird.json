@@ -1,0 +1,10 @@
+{
+    "admin/vpn/netbird": {
+        "title": "NetBird",
+        "order": 100,
+        "action": {
+            "type": "view",
+            "path": "netbird/overview"
+        }
+    }
+}
