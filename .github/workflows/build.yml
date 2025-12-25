@@ -33,11 +33,18 @@ jobs:
             echo "CONFIG_PACKAGE_luci-app-netbird=y" >> .config
             make defconfig
             
+            # Check if package is selected
+            grep "CONFIG_PACKAGE_luci-app-netbird" .config || echo "Package not selected in .config"
+            
             # Build
             make package/luci-app-netbird/compile V=s
+            
+            # Debug: List bin directory
+            echo "Listing bin directory:"
+            find bin -type f
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: luci-app-netbird-ipk
-          path: bin/packages/**/*.ipk
+          name: luci-app-netbird-debug
+          path: bin/
